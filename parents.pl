@@ -1,5 +1,6 @@
-:- encoding(utf8).
+:- encoding(utf8).      % Установить кодировку UTF-8, чтобы можно было работать с русскими символами
 
+% Факты, описывающие генеалогическое древо
 man("Алексей Михайлович").
 man("Иван V").
 man("Карл-Фридрих").
@@ -63,6 +64,8 @@ child("Константин Павлович", "Мария Федоровна").
 child("Александр I", "Павел I").
 child("Александр I", "Мария Федоровна").
 
+% Описание правил
+
 mother(Child, Mother) :- woman(Mother), child(Child, Mother).
 father(Child, Father) :- man(Father), child(Child, Father).
 grandson(Grandson, Grandparent) :- man(Grandson), child(Grandson, Parent), child(Parent, Grandparent).
@@ -74,7 +77,7 @@ sibling(Person, Sibling) :- at_least_one_same_parent(Person, Sibling), Person\=S
 brother(Brother, Sibling) :- sibling(Brother, Sibling), man(Brother).
 sister(Sister, Sibling) :- sibling(Sister, Sibling), woman(Sister).
 
-aunt(Person, Aunt) :- woman(Aunt), child(Person, Parent), sister(Aunt, Parent).
+aunt(Person, Aunt) :- child(Person, Parent), sister(Aunt, Parent).
 
-ancestor(Ancestor, Person) :- child(Person, Ancestor).
-ancestor(Ancestor, Person) :- child(AncestorsChild, Ancestor), ancestor(AncestorsChild, Person).
+ancestor(Ancestor, Person) :- child(Person, Ancestor).  % Базовый случай
+ancestor(Ancestor, Person) :- child(AncestorsChild, Ancestor), ancestor(AncestorsChild, Person).    % Общий случай
